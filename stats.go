@@ -25,6 +25,20 @@ func (b bernoulli) pmf(k int) float64 {
 	return -1
 }
 
+func (b bernoulli) cdf(k int) float64 {
+	if k < 0 {
+		return 0
+	}
+
+	if k < 1 {
+		return 1 - b.p
+	}
+	if k >= 1 {
+		return 1
+	}
+	return -1
+}
+
 func (b bernoulli) quantile(p float64) int {
 	if p < 0 {
 		return -1
@@ -32,7 +46,7 @@ func (b bernoulli) quantile(p float64) int {
 	if p < b.p {
 		return 0
 	}
-	if b.p < 1 {
+	if b.p <= 1 {
 		return 1
 	}
 	return -1
@@ -55,28 +69,30 @@ func (l laplace) cdf(x float64) float64 {
 	if x >= l.mean {
 		return 1 - math.Exp((l.mean-x)/l.b)/2
 	}
+	return -1
 }
-func (l laplace) quantile(x float64) float64 {
 
-	if x > 0 && x < .5 {
-		return l.mean + l.b*math.Log(2*l.b*x)
+func (l laplace) quantile(p float64) float64 {
+
+	if p > 0 && p <= .5 {
+		return l.mean + l.b*math.Log(2*p)
 	}
 
-	if x > .5 && x < 1 {
-		return l.mean - l.b*math.Log(2*(1-x))
+	if p > .5 && p < 1 {
+		return l.mean - l.b*math.Log(2*(1-p))
 	}
-	throw error
+	panic("wrong domain")
+	return -1
 }
 
 func main() {
-	b := bernoulli{.4}
+	b := bernoulli{.5}
 	fmt.Println(b.pmf(0))
 	fmt.Println(b.cdf(0))
-	fmt.Println(b.quantile(.5))
+	fmt.Println(b.quantile(.4))
 
 	l := laplace{0, 1}
 	fmt.Println(l.pdf(0))
-	fmt.Println(b.cdf(0))
-	fmt.Println(b.quantile(.5))
-
+	fmt.Println(l.cdf(0))
+	fmt.Println(l.quantile(.5))
 }
