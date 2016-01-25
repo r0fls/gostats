@@ -155,7 +155,9 @@ func (p PoissonType) Cdf(k int) float64 {
 	return total
 }
 
-// unfortunately duplication is required if the Quantile uses Pmf/Pdf
+// unfortunately duplication of Pmf/Pdf
+// is required if the Quantile uses Pmf/Pdf
+// Could be refactored to use the incomplete gamma function
 
 func (p poisson) Pmf(k int) float64 {
 	return math.Pow(p.Mean, float64(k)) * math.Exp(-p.Mean) / math.Gamma(float64(k+1))
@@ -169,4 +171,31 @@ func (p poisson) Quantile(x float64) int {
 		total += p.Pmf(j)
 	}
 	return j
+}
+
+// Geometric
+
+type geometric struct {
+	P float64
+}
+
+type GeometricType struct {
+	Discrete
+	P float64
+}
+
+func Geometric(p float64) GeometricType {
+	return GeometricType{Discrete{geometric{p}.Quantile}, p}
+}
+
+func (g GeometricType) Pmf(k int) float64 {
+	return math.Pow(1-g.P, float64(k-1)) * g.P
+}
+
+func (g GeometricType) Cdf(k int) float64 {
+	return 1 - math.Pow(1-g.P, float64(k))
+}
+
+func (g geometric) Quantile(p float64) int {
+	return int(math.Ceil(math.Log(1-p) / math.Log(1-g.P)))
 }

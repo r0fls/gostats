@@ -9,6 +9,7 @@ func main() {
 	//b := new(stats.Bernoulli)
 	//b.P = .5
 	stats.Seed()
+
 	b := stats.Bernoulli(.5)
 	fmt.Println(b.Random())
 	fmt.Println(b.Pmf(0))
@@ -23,8 +24,14 @@ func main() {
 
 	p := stats.Poisson(5)
 	fmt.Println(p.Random())
-	fmt.Println(p.Pmf(0))
+	fmt.Println(p.Pmf(5))
 	fmt.Println(p.Cdf(10))
 	fmt.Println(p.Quantile(.5))
+
+	g := stats.Geometric(.2)
+	fmt.Println(g.Random())
+	fmt.Println(g.Pmf(5))
+	fmt.Println(g.Cdf(10))
+	fmt.Println(g.Quantile(.5))
 
 }
