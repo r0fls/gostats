@@ -2,19 +2,33 @@ package stats
 
 import (
 	"math"
+	"math/rand"
+	"time"
 )
+
+func Seed() {
+	rand.Seed(time.Now().UTC().UnixNano())
+}
+
+func random() float64 {
+	return rand.Float64()
+}
 
 type Discrete struct {
 	Quantile func(p float64) int
 }
 
-func (this Discrete) Random(k int) int {
-	return k
+func (this Discrete) Random(k ...int) int {
+	return this.Quantile(random())
 }
 
-//func (d Distribution) random(k int) []float64 {
-//	return float64(k)
-//}
+type Continuous struct {
+	Quantile func(p float64) float64
+}
+
+func (this Continuous) Random(k ...int) float64 {
+	return this.Quantile(random())
+}
 
 // Bernoulli
 
@@ -72,32 +86,26 @@ func (b BernoulliType) Quantile(p float64) int {
 	return bernoulli{b.P}.Quantile(p)
 }
 
-/*
-{
-	if P < 0 {
-		return -1
-	}
-	if P < b.P {
-		return 0
-	}
-	if b.P <= 1 {
-		return 1
-	}
-	return -1
-}
-*/
-
 // Laplace
 
-type Laplace struct {
+type laplace struct {
 	Mean, B float64
 }
 
-func (l Laplace) Pdf(x float64) float64 {
+type LaplaceType struct {
+	Continuous
+	Mean, B float64
+}
+
+func Laplace(mean float64, b float64) LaplaceType {
+	return LaplaceType{Continuous{laplace{mean, b}.Quantile}, mean, b}
+}
+
+func (l LaplaceType) Pdf(x float64) float64 {
 	return math.Exp(-math.Abs(x-l.Mean)/l.B) / (2 * l.B)
 }
 
-func (l Laplace) Cdf(x float64) float64 {
+func (l LaplaceType) Cdf(x float64) float64 {
 	if x < l.Mean {
 		return math.Exp((x-l.Mean)/l.B) / 2
 	}
@@ -107,7 +115,7 @@ func (l Laplace) Cdf(x float64) float64 {
 	return -1
 }
 
-func (l Laplace) Quantile(p float64) float64 {
+func (l laplace) Quantile(p float64) float64 {
 
 	if p > 0 && p <= .5 {
 		return l.Mean + l.B*math.Log(2*p)
