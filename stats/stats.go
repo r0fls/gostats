@@ -18,21 +18,17 @@ func (this Discrete) Random(k int) int {
 
 // Bernoulli
 
-type Bernoulli struct {
-	Discrete
-	P float64
-}
-
-func New(p float64) Bernoulli {
-	return Bernoulli{Discrete{bernoulli{p}.Quantile}, p}
-}
-
 type bernoulli struct {
 	P float64
 }
 
-func (b Bernoulli) New(p float64) Bernoulli {
-	return Bernoulli{Discrete{bernoulli{p}.Quantile}, p}
+type BernoulliType struct {
+	Discrete
+	P float64
+}
+
+func Bernoulli(p float64) BernoulliType {
+	return BernoulliType{Discrete{bernoulli{p}.Quantile}, p}
 }
 
 func (b bernoulli) Quantile(P float64) int {
@@ -48,7 +44,7 @@ func (b bernoulli) Quantile(P float64) int {
 	return -1
 }
 
-func (b Bernoulli) Pmf(k int) float64 {
+func (b BernoulliType) Pmf(k int) float64 {
 	if k == 1 {
 		return b.P
 	}
@@ -58,7 +54,7 @@ func (b Bernoulli) Pmf(k int) float64 {
 	return -1
 }
 
-func (b Bernoulli) Cdf(k int) float64 {
+func (b BernoulliType) Cdf(k int) float64 {
 	if k < 0 {
 		return 0
 	}
@@ -72,7 +68,7 @@ func (b Bernoulli) Cdf(k int) float64 {
 	return -1
 }
 
-func (b Bernoulli) Quantile(p float64) int {
+func (b BernoulliType) Quantile(p float64) int {
 	return bernoulli{b.P}.Quantile(p)
 }
 

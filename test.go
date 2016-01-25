@@ -8,7 +8,7 @@ import (
 func main() {
 	//b := new(stats.Bernoulli)
 	//b.P = .5
-	b := stats.New(.5)
+	b := stats.Bernoulli(.5)
 	//fmt.Println(b.Random(1))
 	fmt.Println(b.Pmf(0))
 	fmt.Println(b.Cdf(0))
