@@ -127,3 +127,46 @@ func (l laplace) Quantile(p float64) float64 {
 	panic("wrong domain")
 	return -1
 }
+
+// Poisson
+
+type poisson struct {
+	Mean float64
+}
+
+type PoissonType struct {
+	Discrete
+	Mean float64
+}
+
+func Poisson(m float64) PoissonType {
+	return PoissonType{Discrete{poisson{m}.Quantile}, m}
+}
+
+func (p PoissonType) Pmf(k int) float64 {
+	return math.Pow(p.Mean, float64(k)) * math.Exp(-p.Mean) / math.Gamma(float64(k+1))
+}
+
+func (p PoissonType) Cdf(k int) float64 {
+	total := 0.0
+	for i := 0; i <= k; i++ {
+		total += p.Pmf(i)
+	}
+	return total
+}
+
+// unfortunately duplication is required if the Quantile uses Pmf/Pdf
+
+func (p poisson) Pmf(k int) float64 {
+	return math.Pow(p.Mean, float64(k)) * math.Exp(-p.Mean) / math.Gamma(float64(k+1))
+}
+
+func (p poisson) Quantile(x float64) int {
+	total := 0.0
+	j := 0
+	for total < x {
+		j += 1
+		total += p.Pmf(j)
+	}
+	return j
+}

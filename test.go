@@ -21,4 +21,10 @@ func main() {
 	fmt.Println(l.Cdf(0))
 	fmt.Println(l.Quantile(.5))
 
+	p := stats.Poisson(5)
+	fmt.Println(p.Random())
+	fmt.Println(p.Pmf(0))
+	fmt.Println(p.Cdf(10))
+	fmt.Println(p.Quantile(.5))
+
 }
