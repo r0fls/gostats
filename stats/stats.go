@@ -11,6 +11,7 @@ package stats
 //    i.e. don't do BernoulliType{Discrete{bernoulli{p}.Quantile}, p}
 //    each time
 // - Quantile gets copied for each distribution to the type
+// - Random should return an array?
 // - get laid
 
 import (
@@ -265,4 +266,36 @@ func (w WeibullType) Quantile(p float64) float64 {
 }
 
 // Exponential
+
+type exponential struct {
+	L float64
+}
+
+type ExponentialType struct {
+	Continuous
+	exponential
+}
+
+func Exponential(l float64) ExponentialType {
+	return ExponentialType{Continuous{exponential{l}.Quantile}, exponential{l}}
+}
+
+func (e exponential) Pdf(x float64) float64 {
+	return e.L * math.Exp(-e.L*x)
+}
+
+func (e exponential) Cdf(x float64) float64 {
+	return 1 - math.Exp(-e.L*x)
+}
+
+func (e exponential) Quantile(p float64) float64 {
+	return -math.Log(1-p) / e.L
+}
+
+func (e ExponentialType) Quantile(p float64) float64 {
+	return exponential{e.L}.Quantile(p)
+}
+
+// Binomial
+
 // Pareto
