@@ -8,11 +8,10 @@ package stats
 // - add an initialize helper function:
 //    takes a distribution and ... input and returns
 //    the parameters needed for a type
-//    i.e. don't do BernoulliType{Discrete{bernoulli{p}.Quantile}, p}
+//    i.e. don't do BernoulliType{discrete{bernoulli{p}.Quantile}, p}
 //    each time
 // - Quantile gets copied for each distribution to the type
 // - Random should return an array?
-// - get laid
 
 import (
 	"math"
@@ -28,19 +27,19 @@ func random() float64 {
 	return rand.Float64()
 }
 
-type Discrete struct {
+type discrete struct {
 	Quantile func(p float64) int
 }
 
-func (this Discrete) Random(k ...int) int {
+func (this discrete) Random(k ...int) int {
 	return this.Quantile(random())
 }
 
-type Continuous struct {
+type continuous struct {
 	Quantile func(p float64) float64
 }
 
-func (this Continuous) Random(k ...int) float64 {
+func (this continuous) Random(k ...int) float64 {
 	return this.Quantile(random())
 }
 
@@ -51,12 +50,36 @@ type bernoulli struct {
 }
 
 type BernoulliType struct {
-	Discrete
-	P float64
+	discrete
+	bernoulli
 }
 
 func Bernoulli(p float64) BernoulliType {
-	return BernoulliType{Discrete{bernoulli{p}.Quantile}, p}
+	return BernoulliType{discrete{bernoulli{p}.Quantile}, bernoulli{p}}
+}
+
+func (b bernoulli) Pmf(k int) float64 {
+	if k == 1 {
+		return b.P
+	}
+	if k == 0 {
+		return 1 - b.P
+	}
+	return -1
+}
+
+func (b bernoulli) Cdf(k int) float64 {
+	if k < 0 {
+		return 0
+	}
+
+	if k < 1 {
+		return 1 - b.P
+	}
+	if k >= 1 {
+		return 1
+	}
+	return -1
 }
 
 func (b bernoulli) Quantile(P float64) int {
@@ -67,30 +90,6 @@ func (b bernoulli) Quantile(P float64) int {
 		return 0
 	}
 	if b.P <= 1 {
-		return 1
-	}
-	return -1
-}
-
-func (b BernoulliType) Pmf(k int) float64 {
-	if k == 1 {
-		return b.P
-	}
-	if k == 0 {
-		return 1 - b.P
-	}
-	return -1
-}
-
-func (b BernoulliType) Cdf(k int) float64 {
-	if k < 0 {
-		return 0
-	}
-
-	if k < 1 {
-		return 1 - b.P
-	}
-	if k >= 1 {
 		return 1
 	}
 	return -1
@@ -107,19 +106,19 @@ type laplace struct {
 }
 
 type LaplaceType struct {
-	Continuous
-	Mean, B float64
+	continuous
+	laplace
 }
 
 func Laplace(mean float64, b float64) LaplaceType {
-	return LaplaceType{Continuous{laplace{mean, b}.Quantile}, mean, b}
+	return LaplaceType{continuous{laplace{mean, b}.Quantile}, laplace{mean, b}}
 }
 
-func (l LaplaceType) Pdf(x float64) float64 {
+func (l laplace) Pdf(x float64) float64 {
 	return math.Exp(-math.Abs(x-l.Mean)/l.B) / (2 * l.B)
 }
 
-func (l LaplaceType) Cdf(x float64) float64 {
+func (l laplace) Cdf(x float64) float64 {
 	if x < l.Mean {
 		return math.Exp((x-l.Mean)/l.B) / 2
 	}
@@ -153,32 +152,24 @@ type poisson struct {
 }
 
 type PoissonType struct {
-	Discrete
-	Mean float64
+	discrete
+	poisson
 }
 
 func Poisson(m float64) PoissonType {
-	return PoissonType{Discrete{poisson{m}.Quantile}, m}
+	return PoissonType{discrete{poisson{m}.Quantile}, poisson{m}}
 }
 
-func (p PoissonType) Pmf(k int) float64 {
+func (p poisson) Pmf(k int) float64 {
 	return math.Pow(p.Mean, float64(k)) * math.Exp(-p.Mean) / math.Gamma(float64(k+1))
 }
 
-func (p PoissonType) Cdf(k int) float64 {
+func (p poisson) Cdf(k int) float64 {
 	total := 0.0
 	for i := 0; i <= k; i++ {
 		total += p.Pmf(i)
 	}
 	return total
-}
-
-// unfortunately duplication of Pmf/Pdf
-// is required if the Quantile uses Pmf/Pdf
-// Could be refactored to use the incomplete gamma function
-
-func (p poisson) Pmf(k int) float64 {
-	return math.Pow(p.Mean, float64(k)) * math.Exp(-p.Mean) / math.Gamma(float64(k+1))
 }
 
 func (p poisson) Quantile(x float64) int {
@@ -191,6 +182,10 @@ func (p poisson) Quantile(x float64) int {
 	return j
 }
 
+func (p PoissonType) Quantile(x float64) int {
+	return poisson{p.Mean}.Quantile(x)
+}
+
 // Geometric
 
 type geometric struct {
@@ -198,12 +193,12 @@ type geometric struct {
 }
 
 type GeometricType struct {
-	Discrete
+	discrete
 	geometric
 }
 
 func Geometric(p float64) GeometricType {
-	return GeometricType{Discrete{geometric{p}.Quantile}, geometric{p}}
+	return GeometricType{discrete{geometric{p}.Quantile}, geometric{p}}
 }
 
 func (g geometric) Pmf(k int) float64 {
@@ -229,12 +224,12 @@ type weibull struct {
 }
 
 type WeibullType struct {
-	Continuous
+	continuous
 	weibull
 }
 
 func Weibull(l float64, k float64) WeibullType {
-	return WeibullType{Continuous{weibull{l, k}.Quantile}, weibull{l, k}}
+	return WeibullType{continuous{weibull{l, k}.Quantile}, weibull{l, k}}
 }
 
 func (w weibull) Pdf(x float64) float64 {
@@ -272,12 +267,12 @@ type exponential struct {
 }
 
 type ExponentialType struct {
-	Continuous
+	continuous
 	exponential
 }
 
 func Exponential(l float64) ExponentialType {
-	return ExponentialType{Continuous{exponential{l}.Quantile}, exponential{l}}
+	return ExponentialType{continuous{exponential{l}.Quantile}, exponential{l}}
 }
 
 func (e exponential) Pdf(x float64) float64 {
@@ -297,5 +292,55 @@ func (e ExponentialType) Quantile(p float64) float64 {
 }
 
 // Binomial
+type binomial struct {
+	N int
+	P float64
+}
+
+type BinomialType struct {
+	discrete
+	binomial
+}
+
+func Binomial(n int, p float64) BinomialType {
+	return BinomialType{discrete{binomial{n, p}.Quantile}, binomial{n, p}}
+}
+
+func (b binomial) Pmf(k int) float64 {
+	r := float64(k)
+	return float64(Choose(b.N, k)) *
+		math.Pow(b.P, r) * math.Pow(1-b.P, float64(b.N-k))
+}
+
+func (b binomial) Cdf(k int) float64 {
+	total := 0.0
+	for i := 0; i <= k; i++ {
+		total += b.Pmf(i)
+	}
+	return total
+}
+
+func (b binomial) Quantile(x float64) int {
+	total := 0.0
+	j := 0
+	for total < x {
+		j += 1
+		total += b.Pmf(j)
+	}
+	return j
+}
+
+func (b BinomialType) Quantile(x float64) int {
+	return binomial{b.N, b.P}.Quantile(x)
+}
 
 // Pareto
+
+// Common functions
+func Factorial(n int) int {
+	return int(math.Gamma(float64(n) + 1))
+}
+
+func Choose(n int, k int) int {
+	return int(Factorial(n) / (Factorial(k) * Factorial(n-k)))
+}
