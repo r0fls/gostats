@@ -34,4 +34,10 @@ func main() {
 	fmt.Println(g.Cdf(10))
 	fmt.Println(g.Quantile(.5))
 
+	w := stats.Weibull(.2, 1)
+	fmt.Println(w.Random())
+	fmt.Println(w.Pdf(5))
+	fmt.Println(w.Cdf(10))
+	fmt.Println(w.Quantile(.5))
+
 }

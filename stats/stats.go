@@ -1,5 +1,18 @@
 package stats
 
+// TODO
+
+// - refactor all distributions before Geometric to match
+// 	  it's style
+// - add more distributions
+// - add an initialize helper function:
+//    takes a distribution and ... input and returns
+//    the parameters needed for a type
+//    i.e. don't do BernoulliType{Discrete{bernoulli{p}.Quantile}, p}
+//    each time
+// - Quantile gets copied for each distribution to the type
+// - get laid
+
 import (
 	"math"
 	"math/rand"
@@ -128,6 +141,10 @@ func (l laplace) Quantile(p float64) float64 {
 	return -1
 }
 
+func (l LaplaceType) Quantile(p float64) float64 {
+	return laplace{l.Mean, l.B}.Quantile(p)
+}
+
 // Poisson
 
 type poisson struct {
@@ -181,21 +198,71 @@ type geometric struct {
 
 type GeometricType struct {
 	Discrete
-	P float64
+	geometric
 }
 
 func Geometric(p float64) GeometricType {
-	return GeometricType{Discrete{geometric{p}.Quantile}, p}
+	return GeometricType{Discrete{geometric{p}.Quantile}, geometric{p}}
 }
 
-func (g GeometricType) Pmf(k int) float64 {
+func (g geometric) Pmf(k int) float64 {
 	return math.Pow(1-g.P, float64(k-1)) * g.P
 }
 
-func (g GeometricType) Cdf(k int) float64 {
+func (g geometric) Cdf(k int) float64 {
 	return 1 - math.Pow(1-g.P, float64(k))
 }
 
 func (g geometric) Quantile(p float64) int {
 	return int(math.Ceil(math.Log(1-p) / math.Log(1-g.P)))
 }
+
+func (g GeometricType) Quantile(p float64) int {
+	return geometric{g.P}.Quantile(p)
+}
+
+// Weibull
+
+type weibull struct {
+	L, K float64
+}
+
+type WeibullType struct {
+	Continuous
+	weibull
+}
+
+func Weibull(l float64, k float64) WeibullType {
+	return WeibullType{Continuous{weibull{l, k}.Quantile}, weibull{l, k}}
+}
+
+func (w weibull) Pdf(x float64) float64 {
+	if x >= 0 {
+		return (w.K / w.L) * math.Pow(x/w.L, w.K-1) * math.Exp(-math.Pow(x/w.L, w.K))
+	}
+	if x < 0 {
+		return 0
+	}
+	return -1
+}
+
+func (w weibull) Cdf(x float64) float64 {
+	if x >= 0 {
+		return 1 - math.Exp(-math.Pow(x/w.L, w.K))
+	}
+	if x < 0 {
+		return 0
+	}
+	return -1
+}
+
+func (w weibull) Quantile(p float64) float64 {
+	return w.L * (math.Pow(-math.Log(1-p), 1/w.K))
+}
+
+func (w WeibullType) Quantile(p float64) float64 {
+	return weibull{w.L, w.K}.Quantile(p)
+}
+
+// Exponential
+// Pareto
