@@ -6,5 +6,5 @@ To install, clone the repo and put it in your project. See the `example.go` for 
 
 ###TO-DO
 - add more distributions
-- make a `fit` method using the MLE
+- make a `fit` method using the MLE for each distribution
 - make `random` return an array?
