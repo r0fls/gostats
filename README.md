@@ -37,4 +37,4 @@ If you're interested in contributing, please submit a pull request, or raise an 
 #####TO-DO
 - add more distributions
 - make a `fit` method using the MLE for each distribution
-- make `random` return an array?
+- should `random` return an array?
