@@ -334,8 +334,6 @@ func (b BinomialType) Quantile(x float64) int {
 	return binomial{b.N, b.P}.Quantile(x)
 }
 
-// Pareto
-
 // Common functions
 func Factorial(n int) int {
 	return int(math.Gamma(float64(n) + 1))
