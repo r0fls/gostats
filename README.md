@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/r0fls/gostats.png)](https://travis-ci.org/r0fls/gostats)
 # gostats
 Statistics for go
 
