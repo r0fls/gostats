@@ -2,7 +2,7 @@
 Statistics for go
 
 ###Usage
-To install, clone the repo and put it in your project. See the `example.go` for a working example of using each distribution.
+To install, you can clone the repo and put it in `$GOPATH/src/github.com/r0fls/gostats/`. Check out `gostats_test.go` for a working example of using each distribution.
 
 You have to call `Seed()` initially before generating any random numbers.
 
