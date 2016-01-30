@@ -78,14 +78,17 @@ func ExampleGeometricRandom() {
 func ExampleGeometricPMF() {
 	g := stats.Geometric(.2)
 	fmt.Println(g.Pmf(5))
+	// Output: 0.08192000000000005
 }
 func ExampleGeometricCDF() {
 	g := stats.Geometric(.2)
 	fmt.Println(g.Cdf(10))
+	// Output: 0.8926258175999999
 }
 func ExampleGeometricQuantile() {
 	g := stats.Geometric(.2)
 	fmt.Println(g.Quantile(.5))
+	// Output: 4
 }
 
 func ExampleWeibullRandom() {
@@ -112,14 +115,17 @@ func ExampleExponentialRandom() {
 func ExampleExponentialPDF() {
 	e := stats.Exponential(.2)
 	fmt.Println(e.Pdf(5))
+	// Output: 0.07357588823428847
 }
 func ExampleExponentialCDF() {
 	e := stats.Exponential(.2)
 	fmt.Println(e.Cdf(10))
+	// Output: 0.8646647167633873
 }
 func ExampleExponentialQuantile() {
 	e := stats.Exponential(.2)
 	fmt.Println(e.Quantile(.5))
+	// Output: 3.465735902799726
 }
 
 func ExampleBinomialRandom() {
@@ -129,12 +135,15 @@ func ExampleBinomialRandom() {
 func ExampleBinomialPMF() {
 	r := stats.Binomial(10, .5)
 	fmt.Println(r.Pmf(5))
+	// Output: 0.24609375
 }
 func ExampleBinomialCDF() {
 	r := stats.Binomial(10, .5)
 	fmt.Println(r.Cdf(10))
+	// Output: 1
 }
 func ExampleBinomialQuantile() {
 	r := stats.Binomial(10, .5)
 	fmt.Println(r.Quantile(.5))
+	// Output: 5
 }
