@@ -4,7 +4,8 @@ Statistics for go
 ###Usage
 To install, do `go get github.com/r0fls/gostats`. Check out `gostats_test.go` for a working example of using each distribution.
 
-You have to call `Seed()` initially before generating any random numbers.
+You have to call `Seed()` initially before generating any random numbers (see
+the example below).
 
 #####Advanced
 You can supply your own seed function, instead of the default:
@@ -14,6 +15,21 @@ You can supply your own seed function, instead of the default:
     }
 
 To do so currently you will need to go into stats.go and modify that function.
+
+### Example
+
+    package main
+
+    import (
+        "fmt"
+        "github.com/r0fls/gostats"
+    )
+
+    func main() {
+        stats.Seed()
+        b := stats.Bernoulli(.5)
+        fmt.Println(b.Random())
+    }
 
 ###Distributions
 Thus far, the following distributions are included: 
