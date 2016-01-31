@@ -363,10 +363,19 @@ func SumInt(data []int) int {
 
 func MedianInt(data []int) float64 {
 	if sort.IntsAreSorted(data) {
-		return float64(data[len(data)/2])
+		if len(data)%2 == 1 {
+			return float64(data[len(data)/2])
+		} else {
+			return float64(data[len(data)/2]+data[len(data)/2-1]) / 2.0
+		}
 	} else {
 		sort.Ints(data)
-		return float64(data[len(data)/2])
+		if len(data)%2 == 1 {
+			return float64(data[len(data)/2])
+		} else {
+			return float64(data[len(data)/2]+data[len(data)/2-1]) / 2.0
+		}
 	}
+	panic("Error in MedianInt")
 	return -1
 }
