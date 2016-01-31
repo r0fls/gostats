@@ -2,8 +2,6 @@ package stats
 
 // TODO
 
-// - refactor all distributions before Geometric to match
-// 	  it's style
 // - add more distributions
 // - add an initialize helper function:
 //    takes a distribution and ... input and returns
@@ -218,6 +216,10 @@ type GeometricType struct {
 
 func Geometric(p float64) GeometricType {
 	return GeometricType{discrete{geometric{p}.Quantile}, geometric{p}}
+}
+
+func FitGeometric(data []int) GeometricType {
+	return Geometric(1 / MeanInt(data))
 }
 
 func (g geometric) Pmf(k int) float64 {

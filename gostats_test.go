@@ -112,6 +112,13 @@ func ExampleGeometricQuantile() {
 	// Output: 4
 }
 
+func ExampleFitGeometric() {
+	data := []int{10, 3, 3, 4, 5}
+	g := stats.FitGeometric(data)
+	fmt.Println(g.Quantile(.5))
+	// Output: 4
+}
+
 func ExampleWeibullRandom() {
 	w := stats.Weibull(.2, 1)
 	fmt.Println(w.Random())
