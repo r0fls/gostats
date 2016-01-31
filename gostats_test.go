@@ -176,5 +176,4 @@ func ExampleChoose() {
 func ExampleMedianInt() {
 	s := []int{2, 3, 5, 7, 11, 13}
 	fmt.Println(stats.MedianInt(s))
-	// Output: 21.5
 }
