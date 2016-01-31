@@ -58,6 +58,13 @@ func ExampleLaplaceQuantile() {
 
 }
 
+func ExampleFitLaplace() {
+	data := []float64{1, 1, 1, 0, 0}
+	l := stats.FitLaplace(data)
+	fmt.Println(l.Quantile(.5))
+	// Output: 1
+}
+
 func ExamplePoissonRandom() {
 	p := stats.Poisson(5)
 	fmt.Println(p.Random())

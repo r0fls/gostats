@@ -120,6 +120,15 @@ func Laplace(mean float64, b float64) LaplaceType {
 	return LaplaceType{continuous{laplace{mean, b}.Quantile}, laplace{mean, b}}
 }
 
+func FitLaplace(data []float64) LaplaceType {
+	mean := MedianFloat64(data)
+	b := 0.0
+	for _, value := range data {
+		b += math.Abs(value - mean)
+	}
+	return Laplace(mean, b)
+}
+
 func (l laplace) Pdf(x float64) float64 {
 	return math.Exp(-math.Abs(x-l.Mean)/l.B) / (2 * l.B)
 }
@@ -374,6 +383,25 @@ func MedianInt(data []int) float64 {
 			return float64(data[len(data)/2])
 		} else {
 			return float64(data[len(data)/2]+data[len(data)/2-1]) / 2.0
+		}
+	}
+	panic("Error in MedianInt")
+	return -1
+}
+
+func MedianFloat64(data []float64) float64 {
+	if sort.Float64sAreSorted(data) {
+		if len(data)%2 == 1 {
+			return data[len(data)/2]
+		} else {
+			return (data[len(data)/2] + data[len(data)/2-1]) / 2.0
+		}
+	} else {
+		sort.Float64s(data)
+		if len(data)%2 == 1 {
+			return data[len(data)/2]
+		} else {
+			return (data[len(data)/2] + data[len(data)/2-1]) / 2.0
 		}
 	}
 	panic("Error in MedianInt")
