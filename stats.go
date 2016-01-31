@@ -175,6 +175,10 @@ func Poisson(m float64) PoissonType {
 	return PoissonType{discrete{poisson{m}.Quantile}, poisson{m}}
 }
 
+func FitPoisson(data []int) PoissonType {
+	return Poisson(MeanInt(data))
+}
+
 func (p poisson) Pmf(k int) float64 {
 	return math.Pow(p.Mean, float64(k)) * math.Exp(-p.Mean) / math.Gamma(float64(k+1))
 }

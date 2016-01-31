@@ -85,6 +85,13 @@ func ExamplePoissonQuantile() {
 	// Output: 5
 }
 
+func ExampleFitPoisson() {
+	data := []int{10, 3, 3, 4, 5}
+	p := stats.FitPoisson(data)
+	fmt.Println(p.Quantile(.5))
+	// Output: 5
+}
+
 func ExampleGeometricRandom() {
 	g := stats.Geometric(.2)
 	fmt.Println(g.Random())
