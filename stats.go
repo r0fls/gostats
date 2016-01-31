@@ -16,6 +16,7 @@ package stats
 import (
 	"math"
 	"math/rand"
+	"sort"
 	"time"
 )
 
@@ -56,6 +57,11 @@ type BernoulliType struct {
 
 func Bernoulli(p float64) BernoulliType {
 	return BernoulliType{discrete{bernoulli{p}.Quantile}, bernoulli{p}}
+}
+
+func FitBernoulli(data []int) BernoulliType {
+	mean := MeanInt(data)
+	return Bernoulli(mean)
 }
 
 func (b bernoulli) Pmf(k int) float64 {
@@ -341,4 +347,26 @@ func Factorial(n int) int {
 
 func Choose(n int, k int) int {
 	return int(Factorial(n) / (Factorial(k) * Factorial(n-k)))
+}
+
+func MeanInt(data []int) float64 {
+	return float64(SumInt(data)) / float64(len(data))
+}
+
+func SumInt(data []int) int {
+	total := 0
+	for _, value := range data {
+		total += value
+	}
+	return total
+}
+
+func MedianInt(data []int) float64 {
+	if sort.IntsAreSorted(data) {
+		return float64(data[len(data)/2])
+	} else {
+		sort.Ints(data)
+		return float64(data[len(data)/2])
+	}
+	return -1
 }

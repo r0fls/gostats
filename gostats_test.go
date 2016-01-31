@@ -17,6 +17,13 @@ func ExampleBernoulliPMF() {
 	// Output: 0.4
 }
 
+func ExampleFitBernoulli() {
+	data := []int{1, 1, 1, 0, 0}
+	b := stats.FitBernoulli(data)
+	fmt.Println(b.Cdf(0))
+	// Output: 0.4
+}
+
 func ExampleBernoulliCDF() {
 	b := stats.Bernoulli(.6)
 	fmt.Println(b.Cdf(0))
@@ -146,4 +153,28 @@ func ExampleBinomialQuantile() {
 	r := stats.Binomial(10, .5)
 	fmt.Println(r.Quantile(.5))
 	// Output: 5
+}
+
+// test common functions
+
+func ExampleSumInt() {
+	s := []int{2, 3, 5, 7, 11, 13}
+	sum := stats.SumInt(s)
+	fmt.Println(sum)
+	// Output: 41
+}
+
+func ExampleFactorial() {
+	fmt.Println(stats.Factorial(4))
+	// Output: 24
+}
+func ExampleChoose() {
+	fmt.Println(stats.Choose(4, 2))
+	// Output: 6
+}
+
+func ExampleMedianInt() {
+	s := []int{2, 3, 5, 7, 11, 13}
+	fmt.Println(stats.MedianInt(s))
+	// Output: 21.5
 }
