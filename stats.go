@@ -376,6 +376,18 @@ func SumInt(data []int) int {
 	return total
 }
 
+func MeanFloat64(data []float64) float64 {
+	return SumFloat64(data) / float64(len(data))
+}
+
+func SumFloat64(data []float64) float64 {
+	total := 0.0
+	for _, value := range data {
+		total += value
+	}
+	return total
+}
+
 func MedianInt(data []int) float64 {
 	if sort.IntsAreSorted(data) {
 		if len(data)%2 == 1 {

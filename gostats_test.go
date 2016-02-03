@@ -185,6 +185,13 @@ func ExampleSumInt() {
 	// Output: 41
 }
 
+func ExampleSumFloat64() {
+	s := []float64{2, 3, 5, 7, 11, 13}
+	sum := stats.SumFloat64(s)
+	fmt.Println(sum)
+	// Output: 41
+}
+
 func ExampleFactorial() {
 	fmt.Println(stats.Factorial(4))
 	// Output: 24
