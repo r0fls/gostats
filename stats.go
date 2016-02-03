@@ -296,6 +296,10 @@ func Exponential(l float64) ExponentialType {
 	return ExponentialType{continuous{exponential{l}.Quantile}, exponential{l}}
 }
 
+func FitExponential(data []float64) ExponentialType {
+	return Exponential(1 / MeanFloat64(data))
+}
+
 func (e exponential) Pdf(x float64) float64 {
 	return e.L * math.Exp(-e.L*x)
 }

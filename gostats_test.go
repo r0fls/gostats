@@ -156,10 +156,18 @@ func ExampleExponentialQuantile() {
 	// Output: 3.465735902799726
 }
 
+func ExampleFitExponential() {
+	data := []float64{10, 3, 3, 4, 5}
+	g := stats.FitExponential(data)
+	fmt.Println(g.Quantile(.5))
+	// Output: 3.465735902799726
+}
+
 func ExampleBinomialRandom() {
 	r := stats.Binomial(10, .5)
 	fmt.Println(r.Random())
 }
+
 func ExampleBinomialPMF() {
 	r := stats.Binomial(10, .5)
 	fmt.Println(r.Pmf(5))
