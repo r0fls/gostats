@@ -10,32 +10,32 @@ the example below).
 
 #####Advanced
 You can supply your own seed function, instead of the default:
-
-    func Seed() {
-	    rand.Seed(time.Now().UTC().UnixNano())
-    }
-
+```go
+func Seed() {
+    rand.Seed(time.Now().UTC().UnixNano())
+}
+```
 To do so currently you will need to go into stats.go and modify that function.
 
 ### Example
+```go
+package main
 
-    package main
+import (
+    "fmt"
+    "github.com/r0fls/gostats"
+)
 
-    import (
-        "fmt"
-        "github.com/r0fls/gostats"
-    )
-
-    func main() {
-        stats.Seed()
-        b := stats.Bernoulli(.5)
-        fmt.Println(b.Random())
-        
-        // or fit a distribution from data...
-        b = stats.FitBernoulli([0,1,1,1])
-        fmt.Println(b.Random())
-    }
-
+func main() {
+    stats.Seed()
+    b := stats.Bernoulli(.5)
+    fmt.Println(b.Random())
+    
+    // or fit a distribution from data...
+    b = stats.FitBernoulli([0,1,1,1])
+    fmt.Println(b.Random())
+}
+```
 ###Distributions
 Currently the following distributions are included: 
 - Bernoulli 
