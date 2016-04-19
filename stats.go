@@ -72,7 +72,7 @@ func (b bernoulli) Pmf(k int) float64 {
 	return -1
 }
 
-func (b bernoulli) Cdf(k int) float64 {
+func (b bernoulli) Cmf(k int) float64 {
 	if k < 0 {
 		return 0
 	}
