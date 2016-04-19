@@ -89,11 +89,9 @@ func (b bernoulli) Cdf(k int) float64 {
 func (b bernoulli) Quantile(P float64) int {
 	if P < 0 {
 		return -1
-	}
-	if P < b.P {
+	} else if P < 1-b.P {
 		return 0
-	}
-	if b.P <= 1 {
+	} else if P <= 1 {
 		return 1
 	}
 	return -1
