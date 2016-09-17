@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/r0fls/gostats.png)](https://travis-ci.org/r0fls/gostats)
 # gostats
-Statistics for go
+Statistics for golang
 
 ###Usage
 To install, do `go get github.com/r0fls/gostats`. Check out `gostats_test.go` for a working example of using each distribution.
