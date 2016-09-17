@@ -30,16 +30,16 @@ func main() {
     stats.Seed()
     b := stats.Bernoulli(.5)
     fmt.Println(b.Random())
-    
+
     // or fit a distribution from data...
     b = stats.FitBernoulli([0,1,1,1])
     fmt.Println(b.Random())
 }
 ```
 ###Distributions
-Currently the following distributions are included: 
-- Bernoulli 
-- Laplace 
+Currently the following distributions are included:
+- Bernoulli
+- Laplace
 - Poisson
 - Geometric
 - Weibull
@@ -53,6 +53,9 @@ And each distribution has these functions:
 - Random
 
 Also there is a corresponding function named `FitDistrbution` for each distribution, as shows in the above example with the Bernoulli. That function uses the [MLE](https://en.wikipedia.org/wiki/Maximum_likelihood) for each distribution to choose the best estimation for the parameters and returns an initialized distribution with them.
+
+###Common
+Additionally there are some common functions. Most notably is LSR, which performs a least squares regression.
 
 ###Contributing
 If you're interested in contributing, please submit a pull request, or raise an issue.

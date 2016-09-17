@@ -427,3 +427,21 @@ func MedianFloat64(data []float64) float64 {
 	panic("Error in MedianInt")
 	return -1
 }
+
+func LSR(data [][]float64) []float64 {
+	total_x := 0.0
+	total_xy := 0.0
+	total_y := 0.0
+	total_x2 := 0.0
+
+	for _, value := range data {
+		total_x += value[0]
+		total_y += value[1]
+		total_xy += value[0] * value[1]
+		total_x2 += math.Pow(value[0], 2)
+	}
+	N := float64(len(data))
+	b := (N*total_xy - total_x*total_y) / (N*total_x2 - math.Pow(total_x, 2))
+	a := (total_y - b*total_x) / N
+	return []float64{a, b}
+}

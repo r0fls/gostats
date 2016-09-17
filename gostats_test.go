@@ -214,3 +214,9 @@ func ExampleMedianInt() {
 	fmt.Println(stats.MedianInt(s))
 	// Output: 6
 }
+
+func ExampleLSR() {
+	data := [][]float64{{60.0, 3.1}, {61.0, 3.6}, {62.0, 3.8}, {63, 4}, {65.0, 4.1}}
+	fmt.Println(stats.LSR(data))
+	// Output: [-7.963513513513208 0.18783783783783292]
+}
