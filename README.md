@@ -2,13 +2,15 @@
 # gostats
 Statistics for golang
 
-###Usage
+### Usage
+
 To install, do `go get github.com/r0fls/gostats`. Check out `gostats_test.go` for a working example of using each distribution.
 
 You have to call `Seed()` initially before generating any random numbers (see
 the example below).
 
-#####Advanced
+##### Advanced
+
 You can supply your own seed function, instead of the default:
 ```go
 func Seed() {
@@ -36,7 +38,7 @@ func main() {
     fmt.Println(b.Random())
 }
 ```
-###Distributions
+### Distributions
 Currently the following distributions are included:
 - Bernoulli
 - Laplace
@@ -54,13 +56,13 @@ And each distribution has these functions:
 
 Also there is a corresponding function named `FitDistrbution` for each distribution, as shows in the above example with the Bernoulli. That function uses the [MLE](https://en.wikipedia.org/wiki/Maximum_likelihood) for each distribution to choose the best estimation for the parameters and returns an initialized distribution with them.
 
-###Common
+### Common
 Additionally there are some common functions. Most notably is LSR, which performs a least squares regression.
 
-###Contributing
+### Contributing
 If you're interested in contributing, please submit a pull request, or raise an issue.
 
-#####TO-DO
+##### TO-DO
 - add more distributions
 - should `random` return an array?
 - allow updating a fitted distribution with more data
