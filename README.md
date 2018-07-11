@@ -54,7 +54,7 @@ And each distribution has these functions:
 - Quantile
 - Random
 
-Also there is a corresponding function named `FitDistrbution` for each distribution, as shows in the above example with the Bernoulli. That function uses the [MLE](https://en.wikipedia.org/wiki/Maximum_likelihood) for each distribution to choose the best estimation for the parameters and returns an initialized distribution with them.
+Also there is a corresponding function named `FitDistrbution` for each distribution, as shown in the above example with the Bernoulli. That function uses the [MLE](https://en.wikipedia.org/wiki/Maximum_likelihood) for each distribution to choose the best estimation for the parameters and returns an initialized distribution with them.
 
 ### Common
 Additionally there are some common functions. Most notably is LSR, which performs a least squares regression.
