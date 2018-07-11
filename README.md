@@ -6,19 +6,6 @@ Statistics for golang
 
 To install, do `go get github.com/r0fls/gostats`. Check out `gostats_test.go` for a working example of using each distribution.
 
-You have to call `Seed()` initially before generating any random numbers (see
-the example below).
-
-##### Advanced
-
-You can supply your own seed function, instead of the default:
-```go
-func Seed() {
-    rand.Seed(time.Now().UTC().UnixNano())
-}
-```
-To do so currently you will need to go into stats.go and modify that function.
-
 ### Example
 ```go
 package main
@@ -29,7 +16,6 @@ import (
 )
 
 func main() {
-    stats.Seed()
     b := stats.Bernoulli(.5)
     fmt.Println(b.Random())
 
@@ -47,6 +33,10 @@ Currently the following distributions are included:
 - Weibull
 - Exponential
 - Binomial
+- NegativeBinomial \*
+
+>\*note the negative binomial takes parameters `r`, `p` where `r` is the number allowed success before termination of the trials and `p` is the success of a given trial. The random variable produced by `NegativeBinomial` is the number of failures.
+
 
 And each distribution has these functions:
 - Pmf or Pdf
@@ -58,6 +48,10 @@ Also there is a corresponding function named `FitDistrbution` for each distribut
 
 ### Common
 Additionally there are some common functions. Most notably is LSR, which performs a least squares regression.
+
+### Additional Info
+
+The default seed function is `time.Now().UTC().UnixNano()`. However you can override that by calling `rand.Seed(uniqueInteger)` yourself before generating random numbers.
 
 ### Contributing
 If you're interested in contributing, please submit a pull request, or raise an issue.

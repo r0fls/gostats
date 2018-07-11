@@ -18,6 +18,10 @@ import (
 	"time"
 )
 
+func init() {
+	Seed()
+}
+
 func Seed() {
 	rand.Seed(time.Now().UTC().UnixNano())
 }
