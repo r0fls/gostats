@@ -184,6 +184,28 @@ func ExampleBinomialQuantile() {
 	// Output: 5
 }
 
+func ExampleNegativeBinomialRandom() {
+	r := stats.NegativeBinomial(10, .5)
+	fmt.Println(r.Random())
+}
+
+func ExampleNegativeBinomialPMF() {
+	r := stats.NegativeBinomial(10, .5)
+	fmt.Println(r.Pmf(5))
+	// Output: 0.06109619140625
+}
+func ExampleNegativeBinomialCDF() {
+	r := stats.NegativeBinomial(10, .5)
+	fmt.Println(r.Cdf(10))
+	// Output: 0.5880985260009766
+}
+
+func ExampleNegativeBinomialQuantile() {
+	r := stats.NegativeBinomial(10, .5)
+	fmt.Println(r.Quantile(.5))
+	// Output: 9
+}
+
 // test common functions
 
 func ExampleSumInt() {

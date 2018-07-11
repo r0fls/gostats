@@ -188,8 +188,8 @@ func (p poisson) Cdf(k int) float64 {
 }
 
 func (p poisson) Quantile(x float64) int {
-	total := 0.0
 	j := 0
+	total := p.Pmf(0)
 	for total < x {
 		j += 1
 		total += p.Pmf(j)
@@ -344,8 +344,8 @@ func (b binomial) Cdf(k int) float64 {
 }
 
 func (b binomial) Quantile(x float64) int {
-	total := 0.0
 	j := 0
+	total := b.Pmf(0)
 	for total < x {
 		j += 1
 		total += b.Pmf(j)
@@ -355,6 +355,47 @@ func (b binomial) Quantile(x float64) int {
 
 func (b BinomialType) Quantile(x float64) int {
 	return binomial{b.N, b.P}.Quantile(x)
+}
+
+// NegativeBinomial
+type negativeBinomial struct {
+	K int
+	P float64
+}
+
+type NegativeBinomialType struct {
+	discrete
+	negativeBinomial
+}
+
+func NegativeBinomial(k int, p float64) NegativeBinomialType {
+	return NegativeBinomialType{discrete{negativeBinomial{k, p}.Quantile}, negativeBinomial{k, p}}
+}
+
+func (b negativeBinomial) Pmf(r int) float64 {
+	return float64(Choose(b.K+r-1, r)) * math.Pow(b.P, float64(b.K)) * math.Pow(1-b.P, float64(r))
+}
+
+func (b negativeBinomial) Cdf(r int) float64 {
+	total := 0.0
+	for i := 0; i <= r; i++ {
+		total += b.Pmf(i)
+	}
+	return total
+}
+
+func (b negativeBinomial) Quantile(x float64) int {
+	j := 0
+	total := b.Pmf(0)
+	for total < x {
+		j += 1
+		total += b.Pmf(j)
+	}
+	return j
+}
+
+func (b NegativeBinomialType) Quantile(x float64) int {
+	return negativeBinomial{b.K, b.P}.Quantile(x)
 }
 
 // Common functions
